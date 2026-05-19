@@ -15,7 +15,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <style>
         :root {
-            --mdc-theme-primary: rgb(240, 255, 29);
+            --mdc-theme-primary: rgb(0, 158, 145);
         }
 
         body {
@@ -28,6 +28,39 @@
 
         .hidden {
             display: none;
+        }
+
+        .sheet {
+            position: absolute;
+            top: 0;
+            width: 100vw;
+            margin-left: 0;
+            background-color: #2e2e2e;
+            transition: 0.3s ease;
+        }
+
+        .sheet-out-of-view {
+            margin-left: -100%;
+        }
+
+        .sheet main {
+            min-height: calc(100vh - 56px - 48px);
+        }
+
+        .sheet img {
+            width: 100%;
+            height: auto;
+        }
+
+        footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background-color: var(--mdc-theme-primary);
+        }
+
+        footer .mdc-tab__icon {
+            color: white !important;
         }
     </style>
 
@@ -89,8 +122,8 @@
                 <div class="mdc-tab-scroller__scroll-area">
                     <div class="mdc-tab-scroller__scroll-content">
 
-
-                        <button class="mdc-tab" role="tab" aria-selected="true" tabindex="0">
+                        <button class="mdc-tab" role="tab" aria-selected="true" tabindex="0"
+                            onclick="filterImages('memes')">
                             <span class="mdc-tab__content">
                                 <!-- <span class="mdc-tab__icon material-icons" aria-hidden="true"></span> -->
                                 <span class="mdc-tab__text-label">Memes</span>
@@ -101,7 +134,8 @@
                             <span class="mdc-tab__ripple"></span>
                         </button>
 
-                        <button class="mdc-tab" role="tab" aria-selected="true" tabindex="0">
+                        <button class="mdc-tab" role="tab" aria-selected="true" tabindex="0"
+                            onclick="filterImages('fails')">
                             <span class="mdc-tab__content">
                                 <!-- <span class="mdc-tab__icon material-icons" aria-hidden="true"></span> -->
                                 <span class="mdc-tab__text-label">Fails</span>
@@ -112,7 +146,8 @@
                             <span class="mdc-tab__ripple"></span>
                         </button>
 
-                        <button class="mdc-tab" role="tab" aria-selected="true" tabindex="0">
+                        <button class="mdc-tab" role="tab" aria-selected="true" tabindex="0"
+                            onclick="filterImages('tweets')">
                             <span class="mdc-tab__content">
                                 <!-- <span class="mdc-tab__icon material-icons" aria-hidden="true"></span> -->
                                 <span class="mdc-tab__text-label">Tweets</span>
@@ -128,8 +163,8 @@
             </div>
         </div>
     </main>
-    <ul class="mdc-image-list mdc-image-list--masonry my-masonry-image-list">
-        <li class="mdc-image-list__item meme">
+    <ul class="mdc-image-list mdc-image-list--masonry my-masonry-image-list ">
+        <li class="mdc-image-list__item memes">
             <img class="mdc-image-list__image" src="placeholder1.png" alt="Image 1">
             <div class="mdc-image-list__supporting">
             </div>
@@ -145,51 +180,118 @@
             </div>
         </li>
         <li class="mdc-image-list__item tweets">
-            <img class="mdc-image-list__image" src="placeholder3.png" alt="Image 1">
+            <img class="mdc-image-list__image" src="placeholder3.png" alt="Image 4">
             <div class="mdc-image-list__supporting">
             </div>
         </li>
         <li class="mdc-image-list__item fails">
-            <img class="mdc-image-list__image" src="placeholder2.jpg" alt="Image 2">
+            <img class="mdc-image-list__image" src="placeholder2.jpg" alt="Image 5">
             <div class="mdc-image-list__supporting">
             </div>
         </li>
-        <li class="mdc-image-list__item meme">
-            <img class="mdc-image-list__image" src="placeholder1.png" alt="Image 3">
+        <li class="mdc-image-list__item memes">
+            <img class="mdc-image-list__image" src="placeholder1.png" alt="Image 6">
             <div class="mdc-image-list__supporting">
             </div>
         </li>
         <li class="mdc-image-list__item fails">
-            <img class="mdc-image-list__image" src="placeholder2.jpg" alt="Image 1">
+            <img class="mdc-image-list__image" src="placeholder2.jpg" alt="Image 7">
             <div class="mdc-image-list__supporting">
             </div>
         </li>
-        <li class="mdc-image-list__item meme">
-            <img class="mdc-image-list__image" src="placeholder1.png" alt="Image 2">
+        <li class="mdc-image-list__item memes">
+            <img class="mdc-image-list__image" src="placeholder1.png" alt="Image 8">
             <div class="mdc-image-list__supporting">
             </div>
         </li>
-        <li class="mdc-image-list__item meme">
-            <img class="mdc-image-list__image" src="placeholder1.png" alt="Image 3">
+        <li class="mdc-image-list__item memes">
+            <img class="mdc-image-list__image" src="placeholder1.png" alt="Image 9">
             <div class="mdc-image-list__supporting">
             </div>
         </li>
         <li class="mdc-image-list__item tweets">
-            <img class="mdc-image-list__image" src="placeholder3.png" alt="Image 1">
+            <img class="mdc-image-list__image" src="placeholder3.png" alt="Image 10">
             <div class="mdc-image-list__supporting">
             </div>
         </li>
-        <li class="mdc-image-list__item meme">
-            <img class="mdc-image-list__image" src="placeholder1.png" alt="Image 2">
+        <li class="mdc-image-list__item memes">
+            <img class="mdc-image-list__image" src="placeholder1.png" alt="Image 11">
             <div class="mdc-image-list__supporting">
             </div>
         </li>
         <li class="mdc-image-list__item fails">
-            <img class="mdc-image-list__image" src="placeholder2.jpg" alt="Image 3">
+            <img class="mdc-image-list__image" src="placeholder2.jpg" alt="Image 12">
             <div class="mdc-image-list__supporting">
             </div>
         </li>
     </ul>
+
+    <section class="sheet sheet-out-of-view">
+        <header class="mdc-top-app-bar">
+            <div class="mdc-top-app-bar__row">
+                <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
+                    <button class="material-icons mdc-top-app-bar__navigation-icon mdc-icon-button"
+                        aria-label="Open navigation menu" onclick="closeSheet()">close</button>
+                    <span class="mdc-top-app-bar__title">Meme title</span>
+                </section>
+                <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-end" role="toolbar">
+                    <button class="material-icons mdc-top-app-bar__action-item mdc-icon-button"
+                        aria-label="Share">share</button>
+                    <button class="material-icons mdc-top-app-bar__action-item mdc-icon-button"
+                        aria-label="Options">more_vert</button>
+                </section>
+            </div>
+        </header>
+        <main class="mdc-top-app-bar--fixed-adjust">
+            <img src="" alt="">
+        </main>
+        <footer>
+            <div class="mdc-tab-bar" role="tablist">
+                <div class="mdc-tab-scroller">
+                    <div class="mdc-tab-scroller__scroll-area">
+                        <div class="mdc-tab-scroller__scroll-content">
+
+                            <button class="mdc-tab" role="tab" aria-selected="true" tabindex="0">
+                                <span class="mdc-tab__content">
+                                    <!-- <span class="mdc-tab__icon material-icons" aria-hidden="true"></span> -->
+                                    <span class="mdc-tab__text-label material-icons mdc-tab__icon">thumb_up</span>
+                                </span>
+                                <span class="mdc-tab-indicator">
+                                    <span
+                                        class="mdc-tab-indicator__content mdc-tab-indicator__content--underline"></span>
+                                </span>
+                                <span class="mdc-tab__ripple"></span>
+                            </button>
+
+                            <button class="mdc-tab" role="tab" aria-selected="true" tabindex="0">
+                                <span class="mdc-tab__content">
+                                    <!-- <span class="mdc-tab__icon material-icons" aria-hidden="true"></span> -->
+                                    <span class="mdc-tab__text-label material-icons mdc-tab__icon">favorite</span>
+                                </span>
+                                <span class="mdc-tab-indicator">
+                                    <span
+                                        class="mdc-tab-indicator__content mdc-tab-indicator__content--underline"></span>
+                                </span>
+                                <span class="mdc-tab__ripple"></span>
+                            </button>
+
+                            <button class="mdc-tab" role="tab" aria-selected="true" tabindex="0">
+                                <span class="mdc-tab__content">
+                                    <!-- <span class="mdc-tab__icon material-icons" aria-hidden="true"></span> -->
+                                    <span class="mdc-tab__text-label material-icons mdc-tab__icon">thumb_down</span>
+                                </span>
+                                <span class="mdc-tab-indicator">
+                                    <span
+                                        class="mdc-tab-indicator__content mdc-tab-indicator__content--underline"></span>
+                                </span>
+                                <span class="mdc-tab__ripple"></span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </section>
 
 
     <!-- Vanaf hier custom Javascript-->
@@ -218,20 +320,6 @@
             drawer.open = false;
         });
 
-        //geactiveerde tab loggen
-        tabBarEl.addEventListener('MDCTabBar:activated', (event) => {
-            const index = event.detail.index;
-            console.log(`Tab ${index} is activated`);
-            if (index === 0) {
-                filterImages('meme');
-            } else if (index === 1) {
-                filterImages('fails');
-            } else if (index === 2) {
-                filterImages('tweets');
-            }
-
-        });
-
         document.querySelector('.mdc-top-app-bar__title').addEventListener('click', () => {
             //alert('Je hebt op de titel geklikt!');
             filterImages('all'); // Toont alle afbeeldingen
@@ -251,6 +339,46 @@
             });
         }
 
+        const imageList = document.querySelector('.mdc-image-list');
+        imageList.addEventListener('click', (event) => {
+            const clickedImage = event.target.closest('.mdc-image-list__item');
+            if (clickedImage) {
+                const imgElement = clickedImage.querySelector('.mdc-image-list__image');
+                openSheet(imgElement.src, imgElement.alt);
+            }
+        });
+
+        function openSheet(imageSrc, title, fromPopState = false) {
+            const sheet = document.querySelector('.sheet');
+            const isSheetOpen = !sheet.classList.contains('sheet-out-of-view');
+            sheet.querySelector('main img').src = imageSrc;
+            sheet.querySelector('.mdc-top-app-bar__title').textContent = title;
+            sheet.classList.remove('sheet-out-of-view');
+            document.body.style.overflow = 'hidden';
+            if (!fromPopState && !isSheetOpen) {
+                history.pushState({ sheetOpen: true, imageSrc, title }, '');
+            }
+        }
+
+        function closeSheet(fromPopState = false) {
+            const sheet = document.querySelector('.sheet');
+            if (sheet.classList.contains('sheet-out-of-view')) return;
+            const imgElement = sheet.querySelector('main img');
+            const title = sheet.querySelector('.mdc-top-app-bar__title').textContent;
+            sheet.classList.add('sheet-out-of-view');
+            document.body.style.overflow = 'auto';
+            if (!fromPopState) {
+                history.pushState({ sheetOpen: false, imageSrc: imgElement.src, title }, '');
+            }
+        }
+
+        window.addEventListener('popstate', (event) => {
+            if (event.state && event.state.sheetOpen) {
+                openSheet(event.state.imageSrc, event.state.title, true);
+            } else {
+                closeSheet(true);
+            }
+        });
 
     </script>
 </body>
