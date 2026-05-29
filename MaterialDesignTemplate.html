@@ -362,21 +362,6 @@
             return window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
         }
 
-        function clearInstallPromptTimer() {
-            if (installPromptDelayTimer !== null) {
-                window.clearTimeout(installPromptDelayTimer);
-                installPromptDelayTimer = null;
-            }
-        }
-
-        function closeInstallSnackbar() {
-            installPromptSuppressed = true;
-            clearInstallPromptTimer();
-            if (installSnackbar.isOpen) {
-                installSnackbar.close('dismiss');
-            }
-        }
-
         function maybeShowInstallSnackbar() {
             if (installPromptSuppressed || isAppInstalled() || !deferredInstallPrompt) {
                 return;
@@ -397,10 +382,18 @@
             deferredInstallPrompt.prompt();
             await deferredInstallPrompt.userChoice;
             deferredInstallPrompt = null;
-            closeInstallSnackbar();
+            installPromptSuppressed = true;
+            if (installSnackbar.isOpen) {
+                installSnackbar.close('action');
+            }
         });
 
-        installSnackbarDismiss.addEventListener('click', closeInstallSnackbar);
+        installSnackbarDismiss.addEventListener('click', () => {
+            installPromptSuppressed = true;
+            if (installSnackbar.isOpen) {
+                installSnackbar.close('dismiss');
+            }
+        });
 
         window.addEventListener('beforeinstallprompt', (event) => {
             event.preventDefault();
@@ -410,7 +403,10 @@
 
         window.addEventListener('appinstalled', () => {
             deferredInstallPrompt = null;
-            closeInstallSnackbar();
+            installPromptSuppressed = true;
+            if (installSnackbar.isOpen) {
+                installSnackbar.close('dismiss');
+            }
         });
 
         installPromptDelayTimer = window.setTimeout(() => {
