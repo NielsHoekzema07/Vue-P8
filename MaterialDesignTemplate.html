@@ -5,8 +5,15 @@
     <!-- Vereiste meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="msapplication-TileColor" content="#55b4da">
+    <meta name="theme-color" content="#55b4da">
+    <link rel="apple-touch-icon" sizes="180x180" href="favicon_io/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon_io/favicon-32x32.png">
+    <meta name="author" content="Jouw naam hier">
     <title>Home</title>
 
+    <!-- Manifest -->
+    <link rel="manifest" href="manifest.json">
     <!-- Material.io bestanden (CSS & Font/icons)-->
     <!-- Uitleg werking componenents: https://material.io/components?platform=web -->
     <!-- Demo van components:         https://material-components.github.io/material-components-web-catalog/#/ -->
@@ -33,7 +40,8 @@
         .sheet {
             position: absolute;
             top: 0;
-            width: 100vw;
+            left: 0;
+            width: 100%;
             margin-left: 0;
             background-color: #2e2e2e;
             transition: 0.3s ease;
@@ -61,6 +69,18 @@
 
         footer .mdc-tab__icon {
             color: white !important;
+        }
+
+        .mdc-snackbar {
+            z-index: 9;
+        }
+
+        .mdc-snackbar__actions {
+            gap: 8px;
+        }
+
+        .mdc-snackbar__dismiss {
+            color: inherit;
         }
     </style>
 
@@ -291,6 +311,23 @@
                 </div>
             </div>
         </footer>
+        <aside class="mdc-snackbar">
+            <div class="mdc-snackbar__surface" role="status" aria-relevant="additions">
+                <div class="mdc-snackbar__label" aria-atomic="false">
+                    Installeer deze app
+                </div>
+                <div class="mdc-snackbar__actions" aria-atomic="true">
+                    <button type="button" class="mdc-button mdc-snackbar__action">
+                        <div class="mdc-button__ripple"></div>
+                        <span class="mdc-button__label">Installeer</span>
+                    </button>
+                    <button type="button" class="material-icons mdc-icon-button mdc-snackbar__dismiss"
+                        aria-label="Sluit installatiemelding">
+                        close
+                    </button>
+                </div>
+            </div>
+        </aside>
     </section>
 
 
@@ -299,6 +336,9 @@
         const listEl = document.querySelector('.mdc-drawer .mdc-list');
         const topAppBarNavIcon = document.querySelector('.mdc-top-app-bar__navigation-icon');
         const mainContentEl = document.querySelector('.main-content');
+        const installSnackbarElement = document.querySelector('.mdc-snackbar');
+        const installSnackbarAction = installSnackbarElement.querySelector('.mdc-snackbar__action');
+        const installSnackbarDismiss = installSnackbarElement.querySelector('.mdc-snackbar__dismiss');
 
         //topAppBar
         const topAppBarElement = document.querySelector('.mdc-top-app-bar');
@@ -309,6 +349,74 @@
         //tabbar
         const tabBarEl = document.querySelector('.mdc-tab-bar');
         const tabBar = MDCTabBar.attachTo(tabBarEl);
+        //snackbar
+        const installSnackbar = new MDCSnackbar(installSnackbarElement);
+        installSnackbar.timeoutMs = 10000;
+
+        let deferredInstallPrompt = null;
+        let installPromptDelayElapsed = false;
+        let installPromptSuppressed = false;
+        let installPromptDelayTimer = null;
+
+        function isAppInstalled() {
+            return window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+        }
+
+        function clearInstallPromptTimer() {
+            if (installPromptDelayTimer !== null) {
+                window.clearTimeout(installPromptDelayTimer);
+                installPromptDelayTimer = null;
+            }
+        }
+
+        function closeInstallSnackbar() {
+            installPromptSuppressed = true;
+            clearInstallPromptTimer();
+            if (installSnackbar.isOpen) {
+                installSnackbar.close('dismiss');
+            }
+        }
+
+        function maybeShowInstallSnackbar() {
+            if (installPromptSuppressed || isAppInstalled() || !deferredInstallPrompt) {
+                return;
+            }
+
+            if (!installPromptDelayElapsed || installSnackbar.isOpen) {
+                return;
+            }
+
+            installSnackbar.open();
+        }
+
+        installSnackbarAction.addEventListener('click', async () => {
+            if (!deferredInstallPrompt) {
+                return;
+            }
+
+            deferredInstallPrompt.prompt();
+            await deferredInstallPrompt.userChoice;
+            deferredInstallPrompt = null;
+            closeInstallSnackbar();
+        });
+
+        installSnackbarDismiss.addEventListener('click', closeInstallSnackbar);
+
+        window.addEventListener('beforeinstallprompt', (event) => {
+            event.preventDefault();
+            deferredInstallPrompt = event;
+            maybeShowInstallSnackbar();
+        });
+
+        window.addEventListener('appinstalled', () => {
+            deferredInstallPrompt = null;
+            closeInstallSnackbar();
+        });
+
+        installPromptDelayTimer = window.setTimeout(() => {
+            installPromptDelayElapsed = true;
+            maybeShowInstallSnackbar();
+        }, 4000);
 
         // open menu
         topAppBarNavIcon.addEventListener('click', () => {
